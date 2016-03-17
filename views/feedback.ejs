@@ -1,0 +1,11 @@
+<%- include header %>
+<% feedbacks.forEach(function (feedback, index) { %>
+<p class="info">
+    姓名：<%= feedback.name %> |
+    日期：<%- feedback.time.toDateString() %><br />
+    电话：<%= feedback.tel %>|邮箱: <%= feedback.email%>
+</p>
+<p>反馈内容:<br/><%= feedback.content %></p>
+<% }) %>
+<%- include page %>
+<%- include footer %>
