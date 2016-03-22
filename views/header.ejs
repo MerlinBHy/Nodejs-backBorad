@@ -18,6 +18,22 @@ KindEditor.ready(function(K) {
     'underline', 'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright',
     'insertorderedlist', 'insertunorderedlist', '|', 'emoticons', 'image', 'link']
   });
+
+  var upload = K.editor({
+          allowFileManager : true,
+          uploadJson:'/uploadImg'
+  });
+  K('#image1').click(function() {
+      upload.loadPlugin('image', function() {
+          upload.plugin.imageDialog({
+          imageUrl : K('#url1').val(),
+          clickFn : function(url, title, width, height, border, align) {
+                    K('#url1').val(url);
+                    upload.hideDialog();
+                    }
+          });
+      });
+  });
 });
 </script>
 
@@ -31,7 +47,9 @@ KindEditor.ready(function(K) {
 <nav>
 <span><a title="后台管理主页" href="/">主页</a></span>
 <% if (user) { %>
-  <span><a title="新闻发表" href="/post">发表新闻</a></span>
+  <span><a title="行业动态" href="/post">发表行业动态</a></span>
+  <span><a title="添加产品信息" href="/addProduct">添加产品信息</a></span>
+  <span><a title="查看产品信息" href="/products">查看产品信息</a><span>
   <span><a title="客户反馈" href="/feedback">查看反馈</a></span>
   <span><a title="登出" href="/logout">登出</a></span>
 <% } else { %>

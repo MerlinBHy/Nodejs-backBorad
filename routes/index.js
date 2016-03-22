@@ -1,6 +1,7 @@
 var crypto = require('crypto'),
     User = require('../models/user.js'),
     Post = require('../models/post.js'),
+    Product = require('../models/product.js'),
     Feedback = require('../models/feedback.js');
 
 var formidable = require('formidable');
@@ -45,6 +46,27 @@ app.get('/', function (req, res) {
         error: req.flash('error').toString()
       });
     });
+  });
+
+  app.get('/products',checkLogin);
+  app.get('/products',function(req,res){
+    var page = parseInt(req.query.p) || 1;
+    Product.getTwenty(page,function(err,products,total){
+      if(err){
+        products = [];
+      }
+      res.render('products',{
+        title:'产品信息',
+        products:products,
+        page:page,
+        isFirstPage:(page - 1) == 0,
+        isLastPage:((page - 1) * 20 + products.length) == total,
+        user:req.session.user,
+        success: req.flash('success').toString(),
+        error: req.flash('error').toString()
+      });
+    });
+
   });
 
   app.get('/reg', checkNotLogin);
@@ -147,6 +169,19 @@ app.get('/', function (req, res) {
     });
   });
 
+  app.post('/addProduct',checkLogin);
+  app.post('/addProduct',function(req,res){
+    var currentUser = req.session.user,
+        product = new Product(currentUser.name,req.body.imageUrl,req.body.title,req.body.synopsis,req.body.post);
+    product.save(function(err){
+      if (err) {
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      req.flash('success', '发布成功!');
+      res.redirect('/products');//发表成功跳转到主页
+    });
+  });
 
   app.get('/logout', checkLogin);
   app.get('/logout', function (req, res) {
@@ -236,6 +271,42 @@ app.get('/u/:name', function (req, res) {
     });
   });
 
+  app.get('/editProduct/:name/:title',checkLogin);
+  app.get('/editProduct/:name/:title',function(req,res){
+    var currentUser = req.session.user;
+    Product.edit(currentUser.name,req.params.title,function(err,product){
+      if (err) {
+        req.flash('error', err);
+        return res.redirect('back');
+      }
+      console.log(product);
+      res.render('editProduct', {
+        title: '编辑产品',
+        product: product,
+        user: req.session.user,
+        success: req.flash('success').toString(),
+        error: req.flash('error').toString()
+      });
+    });
+  });
+  app.get('/product/:name/:title',checkLogin);
+  app.get('/product/:name/:title',function(req,res){
+    var currentUser = req.session.user;
+    Product.getOne(currentUser.name,req.params.title,function(err,p){
+      if(err){
+        req.flash('error',err);
+        return res.redirect('back');
+      }
+      res.render('productDetail',{
+        title:'产品信息',
+        product: p,
+        user:req.session.user,
+        success: req.flash('success').toString(),
+        error: req.flash('error').toString()
+      });
+    });
+  });
+
   app.post('/edit/:name/:day/:title', checkLogin);
   app.post('/edit/:name/:day/:title', function (req, res) {
     var currentUser = req.session.user;
@@ -247,6 +318,19 @@ app.get('/u/:name', function (req, res) {
       }
       req.flash('success', '修改成功!');
       res.redirect(url);//成功！返回文章页
+    });
+  });
+
+  app.post('/editProduct/:name/:title/:synopsis',checkLogin);
+  app.post('/editProduct/:name/:title/:synopsis',function(req,res){
+    var currentUser = req.session.user;
+    Product.update(currentUser.name,req.body.imageUrl,req.params.title,req.body.post,req.body.synopsis,function(err){
+      if (err) {
+        req.flash('error', err);
+        return res.redirect("/products");//出错！
+      }
+      req.flash('success', '修改成功!');
+      res.redirect("/products");//成功！
     });
   });
 
@@ -262,6 +346,30 @@ app.get('/u/:name', function (req, res) {
       res.redirect('/');
     });
   });
+
+  app.get('/removeProduct/:name/:title',checkLogin);
+  app.get('/removeProduct/:name/:title',function(req,res){
+    var currentUser = req.session.user;
+    Product.remove(currentUser.name,req.params.title,function(err){
+      if (err) {
+        req.flash('error', err);
+        return res.redirect('back');
+      }
+      req.flash('success', '删除成功!');
+      res.redirect('/products');
+    });
+  });
+
+  app.get('/addProduct',checkLogin);
+  app.get('/addProduct',function(req,res){
+    res.render('product',{
+      title:'添加产品',
+      user:req.session.user,
+      success: req.flash('success').toString(),
+      error: req.flash('error').toString()
+    });
+  });
+
   function checkLogin(req, res, next) {
     if (!req.session.user) {
       req.flash('error', '未登录!'); 
