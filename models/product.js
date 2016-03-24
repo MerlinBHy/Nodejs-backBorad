@@ -9,6 +9,9 @@ function Product(name,imageUrl, title, synopsis,post) {
     this.title = title;
     this.synopsis = synopsis;
     this.post = post;
+    var date = new Date();
+    this.time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" + 
+      date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) 
 }
 
 module.exports =  Product;
@@ -21,7 +24,8 @@ Product.prototype.save = function(callback) {
         imageUrl:this.imageUrl,
         title: this.title,
         synopsis: this.synopsis,
-        post: this.post
+        post: this.post,
+        time:this.time
     };
 
     mongodb.open(function (err, db) {
@@ -80,7 +84,7 @@ Product.getTwenty = function(page,callback){
     });
 };
 
-Product.edit = function(name, title,callback) {
+Product.edit = function(name, title,time,callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -93,7 +97,8 @@ Product.edit = function(name, title,callback) {
             }
             collection.findOne({
                 "name": name,
-                "title": title
+                "title": title,
+                "time":time
             }, function (err, doc) {
                 mongodb.close();
                 if (err) {
@@ -104,7 +109,7 @@ Product.edit = function(name, title,callback) {
         });
     });
 };
-Product.getOne = function(name,title,callback){
+Product.getOne = function(name,title,time,callback){
     console.log(name);
     console.log(title);
     mongodb.open(function(err,db){
@@ -120,7 +125,8 @@ Product.getOne = function(name,title,callback){
 
             collection.findOne({
                 "name":name,
-                "title":title
+                "title":title,
+                "time":time
             },function(err,doc){
                 mongodb.close();
 
@@ -133,7 +139,7 @@ Product.getOne = function(name,title,callback){
     });
 };
 
-Product.update = function(name,imageUrl, title, post,synopsis, callback) {
+Product.update = function(name,imageUrl, title, post,synopsis, time,callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -148,7 +154,8 @@ Product.update = function(name,imageUrl, title, post,synopsis, callback) {
             //更新文章内容
             collection.update({
                 "name": name,
-                "title": title
+                "title": title,
+                "time":time
             }, {
                 $set: {post: post,imageUrl:imageUrl,synopsis:synopsis}
             }, function (err) {
@@ -162,7 +169,7 @@ Product.update = function(name,imageUrl, title, post,synopsis, callback) {
     });
 };
 
-Product.remove = function(name, title, callback) {
+Product.remove = function(name, title, time,callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -177,7 +184,8 @@ Product.remove = function(name, title, callback) {
 
             collection.remove({
                 "name": name,
-                "title": title
+                "title": title,
+                "time":time
             }, {
                 w: 1
             }, function (err) {

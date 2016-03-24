@@ -1,5 +1,5 @@
 <%- include header %>
-<form method="post" action="/editProduct/<%= product.name%>/<%= product.title %>">
+<form method="post" action="/editProduct/<%= product.name%>/<%= product.title %>/<%= product.time %>">
   产品缩略图上传：(请控制大小)<br />
   <p><input type="text" name="imageUrl" id="url1" value="<%= product.imageUrl%>" /> <input type="button" id="image1" value="选择图片" /></p>
   产品名：<br />

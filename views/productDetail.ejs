@@ -1,12 +1,12 @@
 <%- include header%>
 <p>
-    <span><a class="edit" href="/editProduct/<%= product.name %>/<%= product.title %>">编辑</a></span>
-    <span><a class="edit" href="/removeProduct/<%= product.name %>/<%= product.title %>">删除</a></span>
+    <span><a class="edit" href="/editProduct/<%= product.name %>/<%= product.title %>/<%= product.time%>">编辑</a></span>
+    <span><a class="edit" href="/removeProduct/<%= product.name %>/<%= product.title %>/<%= product.time%>">删除</a></span>
 </p>
 
 <p class="info">
-    <a href="/product/<%= product.name %>/<%= product.title%>"><img src="<%= product.imageUrl%>"></a><br />
-    名称：<a href="/product/<%= product.name %>/<%= product.title%>"><%= product.title %></a><br />
+    <a href="/product/<%= product.name %>/<%= product.title%>/<%= product.time%>"><img src="<%= product.imageUrl%>"></a><br />
+    名称：<a href="/product/<%= product.name %>/<%= product.title%>/<%= product.time%>"><%= product.title %></a><br />
     简介：<%= product.synopsis %><br />
     <%= product.post%>
 </p>

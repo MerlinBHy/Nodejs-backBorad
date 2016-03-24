@@ -157,6 +157,10 @@ app.get('/', function (req, res) {
 
   app.post('/post', checkLogin);
   app.post('/post', function (req, res) {
+    if(req.body.title == ""){
+      req.flash('error','标题不能为空!');
+      return res.redirect("/");
+    }
     var currentUser = req.session.user,
         post = new Post(currentUser.name, req.body.title, req.body.synopsis,req.body.post);
     post.save(function (err) {
@@ -276,10 +280,10 @@ app.get('/u/:name', function (req, res) {
     });
   });
 
-  app.get('/editProduct/:name/:title',checkLogin);
-  app.get('/editProduct/:name/:title',function(req,res){
+  app.get('/editProduct/:name/:title/:time',checkLogin);
+  app.get('/editProduct/:name/:title/:time',function(req,res){
     var currentUser = req.session.user;
-    Product.edit(currentUser.name,req.params.title,function(err,product){
+    Product.edit(currentUser.name,req.params.title,req.params.time,function(err,product){
       if (err) {
         req.flash('error', err);
         return res.redirect('back');
@@ -294,10 +298,10 @@ app.get('/u/:name', function (req, res) {
       });
     });
   });
-  app.get('/product/:name/:title',checkLogin);
-  app.get('/product/:name/:title',function(req,res){
+  app.get('/product/:name/:title/:time',checkLogin);
+  app.get('/product/:name/:title/:time',function(req,res){
     var currentUser = req.session.user;
-    Product.getOne(currentUser.name,req.params.title,function(err,p){
+    Product.getOne(currentUser.name,req.params.title,req.params.time,function(err,p){
       if(err){
         req.flash('error',err);
         return res.redirect('back');
@@ -326,10 +330,10 @@ app.get('/u/:name', function (req, res) {
     });
   });
 
-  app.post('/editProduct/:name/:title',checkLogin);
-  app.post('/editProduct/:name/:title',function(req,res){
+  app.post('/editProduct/:name/:title/:time',checkLogin);
+  app.post('/editProduct/:name/:title/:time',function(req,res){
     var currentUser = req.session.user;
-    Product.update(currentUser.name,req.body.imageUrl,req.params.title,req.body.post,req.body.synopsis,function(err){
+    Product.update(currentUser.name,req.body.imageUrl,req.params.title,req.body.post,req.body.synopsis,req.params.time,function(err){
       if (err) {
         req.flash('error', err);
         return res.redirect("/products");//出错！
@@ -352,10 +356,10 @@ app.get('/u/:name', function (req, res) {
     });
   });
 
-  app.get('/removeProduct/:name/:title',checkLogin);
-  app.get('/removeProduct/:name/:title',function(req,res){
+  app.get('/removeProduct/:name/:title/:time',checkLogin);
+  app.get('/removeProduct/:name/:title/:time',function(req,res){
     var currentUser = req.session.user;
-    Product.remove(currentUser.name,req.params.title,function(err){
+    Product.remove(currentUser.name,req.params.title,req.params.time,function(err){
       if (err) {
         req.flash('error', err);
         return res.redirect('back');
