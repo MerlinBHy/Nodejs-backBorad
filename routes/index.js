@@ -171,12 +171,17 @@ app.get('/', function (req, res) {
 
   app.post('/addProduct',checkLogin);
   app.post('/addProduct',function(req,res){
+
+    if(req.body.title == ""){
+      req.flash('error','名称不能为空!');
+      return res.redirect("/products");
+    }
     var currentUser = req.session.user,
         product = new Product(currentUser.name,req.body.imageUrl,req.body.title,req.body.synopsis,req.body.post);
     product.save(function(err){
       if (err) {
         req.flash('error', err);
-        return res.redirect('/');
+        return res.redirect('/products');
       }
       req.flash('success', '发布成功!');
       res.redirect('/products');//发表成功跳转到主页

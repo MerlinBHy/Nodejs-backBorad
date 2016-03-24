@@ -1,9 +1,9 @@
 <%- include header %>
 <% products.forEach(function (product, index) { %>
 <p class="info">
-    <a href="/product/<%= product.name %>/<%= product.title%>"><img src="<%= product.imageUrl%>"></a><br />
-    名称：<a href="/product/<%= product.name %>/<%= product.title%>"><%= product.title %></a><br />
+    产品名称：<a href="/product/<%= product.name %>/<%= product.title%>"><%= product.title %></a><br />
     简介：<%= product.synopsis %><br />
+    <hr />
 </p>
 <% }) %>
 <%- include page %>
