@@ -321,8 +321,8 @@ app.get('/u/:name', function (req, res) {
     });
   });
 
-  app.post('/editProduct/:name/:title/:synopsis',checkLogin);
-  app.post('/editProduct/:name/:title/:synopsis',function(req,res){
+  app.post('/editProduct/:name/:title',checkLogin);
+  app.post('/editProduct/:name/:title',function(req,res){
     var currentUser = req.session.user;
     Product.update(currentUser.name,req.body.imageUrl,req.params.title,req.body.post,req.body.synopsis,function(err){
       if (err) {
