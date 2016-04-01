@@ -3,12 +3,14 @@
  */
 var mongodb = require('./db');
 
-function Product(name,imageUrl, title, synopsis,post) {
+function Product(name,imageUrl, title, synopsis,type,producer,post) {
     this.name = name;
     this.imageUrl = imageUrl;
     this.title = title;
     this.synopsis = synopsis;
+    this.type = type;
     this.post = post;
+    this.producer = producer;
     var date = new Date();
     this.time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" + 
       date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) 
@@ -25,7 +27,9 @@ Product.prototype.save = function(callback) {
         title: this.title,
         synopsis: this.synopsis,
         post: this.post,
-        time:this.time
+        time:this.time,
+        type:this.type,
+        producer:this.producer
     };
 
     mongodb.open(function (err, db) {
@@ -139,7 +143,7 @@ Product.getOne = function(name,title,time,callback){
     });
 };
 
-Product.update = function(name,imageUrl, title, post,synopsis, time,callback) {
+Product.update = function(name,imageUrl, title, post,synopsis, time,type,producer,callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -157,7 +161,7 @@ Product.update = function(name,imageUrl, title, post,synopsis, time,callback) {
                 "title": title,
                 "time":time
             }, {
-                $set: {post: post,imageUrl:imageUrl,synopsis:synopsis}
+                $set: {post: post,imageUrl:imageUrl,synopsis:synopsis,type:type,producer:producer}
             }, function (err) {
                 mongodb.close();
                 if (err) {

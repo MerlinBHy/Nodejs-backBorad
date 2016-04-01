@@ -4,8 +4,19 @@
   <p><input type="text" name="imageUrl" id="url1" value="<%= product.imageUrl%>" /> <input type="button" id="image1" value="选择图片" /></p>
   产品名：<br />
   <input type="text" name="title" value="<%= product.title%>" disabled="disabled"/><br />
-  简介：<br />
-  <input type="text" name="synopsis" value="<%= product.synopsis %>"/><br />
+  <br />
+  产品类别：  <select name="type">
+  				<option value = "循环系统用药物" <%= product.type == "循环系统用药物"? "selected":"" %>>循环系统用药物</option>
+  				<option value = "神经系统用药物" <%= product.type == "神经系统用药物"? "selected":"" %>>神经系统用药物</option>
+  				<option value = "消化系统用药物" <%= product.type == "消化系统用药物"? "selected":"" %>>消化系统用药物</option>
+  				<option value = "抗感染用药物" <%= product.type == "抗感染用药物"? "selected":"" %>>抗感染用药物</option>
+  				<option value = "血液系统用药物" <%= product.type == "血液系统用药物"? "selected":"" %>>血液系统用药物</option>
+  				<option value = "中成药" <%= product.type == "中成药"? "selected":"" %>>中成药</option>
+  				<option value = "其他" <%= product.type == "其他"? "selected":"" %>>其他</option>
+  			</select><br />
+  			<br />
+  厂家：  <input type="text" name="producer" value="<%= product.producer %>"/><br />
+  <br />简介：<input type="text" name="synopsis" value="<%= product.synopsis %>"/><br /><br />
   产品详细介绍：<br />
   <textarea name="post" rows="20" cols="100" ><%= product.post%></textarea><br />
   <input type="submit" value="保存" />

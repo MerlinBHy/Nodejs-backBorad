@@ -181,7 +181,7 @@ app.get('/', function (req, res) {
       return res.redirect("/products");
     }
     var currentUser = req.session.user,
-        product = new Product(currentUser.name,req.body.imageUrl,req.body.title,req.body.synopsis,req.body.post);
+        product = new Product(currentUser.name,req.body.imageUrl,req.body.title,req.body.synopsis,req.body.type,req.body.post);
     product.save(function(err){
       if (err) {
         req.flash('error', err);
@@ -288,7 +288,7 @@ app.get('/u/:name', function (req, res) {
         req.flash('error', err);
         return res.redirect('back');
       }
-      console.log(product);
+      console.log(product.type == "循环系统用药物");
       res.render('editProduct', {
         title: '编辑产品',
         product: product,
@@ -333,7 +333,7 @@ app.get('/u/:name', function (req, res) {
   app.post('/editProduct/:name/:title/:time',checkLogin);
   app.post('/editProduct/:name/:title/:time',function(req,res){
     var currentUser = req.session.user;
-    Product.update(currentUser.name,req.body.imageUrl,req.params.title,req.body.post,req.body.synopsis,req.params.time,function(err){
+    Product.update(currentUser.name,req.body.imageUrl,req.params.title,req.body.post,req.body.synopsis,req.params.time,req.body.type,req.body.producer,function(err){
       if (err) {
         req.flash('error', err);
         return res.redirect("/products");//出错！

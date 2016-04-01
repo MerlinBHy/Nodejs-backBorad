@@ -2,6 +2,8 @@
 <% products.forEach(function (product, index) { %>
 <p class="info">
     产品名称：<a href="/product/<%= product.name %>/<%= product.title%>/<%= product.time %>"><%= product.title %></a><br />
+    类别：<%= product.type %><br />
+    厂家：<%= product.producer %><br />
     简介：<%= product.synopsis %><br />
     <hr />
 </p>

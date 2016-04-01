@@ -7,7 +7,10 @@
 <p class="info">
     <a href="/product/<%= product.name %>/<%= product.title%>/<%= product.time%>"><img src="<%= product.imageUrl%>"></a><br />
     名称：<a href="/product/<%= product.name %>/<%= product.title%>/<%= product.time%>"><%= product.title %></a><br />
+    厂家：<%= product.producer %><br />
+    类别：<%= product.type %><br />
     简介：<%= product.synopsis %><br />
-    <%= product.post%>
+    <hr />
+    <%- product.post%>
 </p>
 <%- include footer %>
