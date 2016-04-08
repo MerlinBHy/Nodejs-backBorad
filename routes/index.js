@@ -181,7 +181,7 @@ app.get('/', function (req, res) {
       return res.redirect("/products");
     }
     var currentUser = req.session.user,
-        product = new Product(currentUser.name,req.body.imageUrl,req.body.title,req.body.synopsis,req.body.type,req.body.post);
+        product = new Product(currentUser.name,req.body.imageUrl,req.body.title,req.body.synopsis,req.body.type,req.body.producer,req.body.post);
     product.save(function(err){
       if (err) {
         req.flash('error', err);
