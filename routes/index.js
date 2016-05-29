@@ -280,10 +280,10 @@ app.get('/u/:name', function (req, res) {
     });
   });
 
-  app.get('/editProduct/:name/:title/:time',checkLogin);
-  app.get('/editProduct/:name/:title/:time',function(req,res){
+  app.get('/editProduct/:p_id',checkLogin);
+  app.get('/editProduct/:p_id',function(req,res){
     var currentUser = req.session.user;
-    Product.edit(currentUser.name,req.params.title,req.params.time,function(err,product){
+    Product.edit(req.params.p_id,function(err,product){
       if (err) {
         req.flash('error', err);
         return res.redirect('back');
@@ -298,10 +298,10 @@ app.get('/u/:name', function (req, res) {
       });
     });
   });
-  app.get('/product/:name/:title/:time',checkLogin);
-  app.get('/product/:name/:title/:time',function(req,res){
+  app.get('/product/:p_id',checkLogin);
+  app.get('/product/:p_id',function(req,res){
     var currentUser = req.session.user;
-    Product.getOne(currentUser.name,req.params.title,req.params.time,function(err,p){
+    Product.getOne(req.params.p_id,function(err,p){
       if(err){
         req.flash('error',err);
         return res.redirect('back');
@@ -330,10 +330,10 @@ app.get('/u/:name', function (req, res) {
     });
   });
 
-  app.post('/editProduct/:name/:title/:time',checkLogin);
-  app.post('/editProduct/:name/:title/:time',function(req,res){
+  app.post('/editProduct/:p_id',checkLogin);
+  app.post('/editProduct/:p_id',function(req,res){
     var currentUser = req.session.user;
-    Product.update(currentUser.name,req.body.imageUrl,req.params.title,req.body.post,req.body.synopsis,req.params.time,req.body.type,req.body.producer,function(err){
+    Product.update(currentUser.name,req.body.imageUrl,req.params.p_id,req.body.post,req.body.synopsis,req.body.type,req.body.producer,function(err){
       if (err) {
         req.flash('error', err);
         return res.redirect("/products");//出错！
@@ -356,10 +356,10 @@ app.get('/u/:name', function (req, res) {
     });
   });
 
-  app.get('/removeProduct/:name/:title/:time',checkLogin);
-  app.get('/removeProduct/:name/:title/:time',function(req,res){
+  app.get('/removeProduct/:p_id',checkLogin);
+  app.get('/removeProduct/:p_id',function(req,res){
     var currentUser = req.session.user;
-    Product.remove(currentUser.name,req.params.title,req.params.time,function(err){
+    Product.remove(req.params.p_id,function(err){
       if (err) {
         req.flash('error', err);
         return res.redirect('back');

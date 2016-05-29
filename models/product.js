@@ -2,6 +2,7 @@
  * Created by merlin on 16/3/22.
  */
 var mongodb = require('./db');
+var ObjectID = require('mongodb').ObjectID;
 
 function Product(name,imageUrl, title, synopsis,type,producer,post) {
     this.name = name;
@@ -88,7 +89,7 @@ Product.getTwenty = function(page,callback){
     });
 };
 
-Product.edit = function(name, title,time,callback) {
+Product.edit = function(p_id,callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -100,9 +101,7 @@ Product.edit = function(name, title,time,callback) {
                 return callback(err);
             }
             collection.findOne({
-                "name": name,
-                "title": title,
-                "time":time
+               "_id":new ObjectID(p_id)
             }, function (err, doc) {
                 mongodb.close();
                 if (err) {
@@ -113,37 +112,32 @@ Product.edit = function(name, title,time,callback) {
         });
     });
 };
-Product.getOne = function(name,title,time,callback){
-    console.log(name);
-    console.log(title);
+Product.getOne = function(p_id,callback){
+    console.log(p_id);
     mongodb.open(function(err,db){
         if(err){
             return callback(err);
         }
-
-        db.collection('products',function(err,collection){
-            if(err){
+        db.collection('products', function (err, collection) {
+            if (err) {
                 mongodb.close();
                 return callback(err);
             }
-
             collection.findOne({
-                "name":name,
-                "title":title,
-                "time":time
+                "_id":new ObjectID(p_id)
             },function(err,doc){
                 mongodb.close();
-
                 if(err){
                     return callback(err);
                 }
+                console.log(doc);
                 callback(null,doc);
             });
         });
     });
 };
 
-Product.update = function(name,imageUrl, title, post,synopsis, time,type,producer,callback) {
+Product.update = function(name,imageUrl, p_id, post,synopsis,type,producer,callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -157,9 +151,7 @@ Product.update = function(name,imageUrl, title, post,synopsis, time,type,produce
             }
             //更新文章内容
             collection.update({
-                "name": name,
-                "title": title,
-                "time":time
+                "_id":new ObjectID(p_id)
             }, {
                 $set: {post: post,imageUrl:imageUrl,synopsis:synopsis,type:type,producer:producer}
             }, function (err) {
@@ -173,7 +165,7 @@ Product.update = function(name,imageUrl, title, post,synopsis, time,type,produce
     });
 };
 
-Product.remove = function(name, title, time,callback) {
+Product.remove = function(p_id,callback) {
     //打开数据库
     mongodb.open(function (err, db) {
         if (err) {
@@ -187,9 +179,7 @@ Product.remove = function(name, title, time,callback) {
             }
 
             collection.remove({
-                "name": name,
-                "title": title,
-                "time":time
+                "_id":new ObjectID(p_id)
             }, {
                 w: 1
             }, function (err) {
